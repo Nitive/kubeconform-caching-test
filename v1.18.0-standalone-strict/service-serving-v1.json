@@ -1,0 +1,83 @@
+{
+  "properties": {
+    "spec": {
+      "properties": {
+        "template": {
+          "description": "A template for the current desired application state.\nChanges to `template` will cause a new Revision to be created as\ndefined in the lifecycle section. The contents of the Service's\nRevisionTemplateSpec is used to create a corresponding Configuration.\n",
+          "type": "object",
+          "x-kubernetes-preserve-unknown-fields": true
+        },
+        "traffic": {
+          "description": "Traffic specifies how to distribute traffic over a\ncollection of Revisions belonging to the Service. If traffic is\nempty or not provided, defaults to 100% traffic to the latest\n`Ready` Revision. The contents of the Service's TrafficTarget is\nused to create a corresponding Route.\n",
+          "items": {
+            "properties": {
+              "configurationName": {
+                "description": "ConfigurationName of a configuration to whose latest revision we will send\nthis portion of traffic. When the \"status.latestReadyRevisionName\" of the\nreferenced configuration changes, we will automatically migrate traffic\nfrom the prior \"latest ready\" revision to the new one.  This field is never\nset in Route's status, only its spec.\nThis is mutually exclusive with RevisionName.\n",
+                "type": "string"
+              },
+              "latestRevision": {
+                "description": "`latestRevision` may be optionally provided to indicate\nthat the latest ready Revision of the Configuration should be used\nfor this traffic target. When provided latestRevision MUST be true\nif revisionName is empty, and it MUST be false when revisionName is non-empty.\n",
+                "type": "boolean"
+              },
+              "percent": {
+                "description": "The percentage of requests which should be allocated\nfrom the main Route domain name to the specified `revisionName` or\n`configurationName`.\nAll `percent` values in `traffic` MUST sum to 100.\n",
+                "maximum": 100,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "revisionName": {
+                "description": "A specific revision to which to send this portion\nof traffic.\nThis is mutually exclusive with configurationName.\n",
+                "type": "string"
+              },
+              "tag": {
+                "description": "Tag is optionally used to expose a dedicated URL for\nreferencing this target exclusively. The dedicated URL MUST include\nin it the string provided by tag.\n",
+                "type": "string"
+              }
+            },
+            "type": "object",
+            "x-kubernetes-preserve-unknown-fields": true,
+            "additionalProperties": false
+          },
+          "type": "array",
+          "x-kubernetes-preserve-unknown-fields": true
+        }
+      },
+      "type": "object",
+      "x-kubernetes-preserve-unknown-fields": true,
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "x-kubernetes-preserve-unknown-fields": true
+    },
+    "apiVersion": {
+      "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+      "type": "string",
+      "enum": [
+        "serving.knative.dev/v1"
+      ]
+    },
+    "kind": {
+      "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+      "type": "string",
+      "enum": [
+        "Service"
+      ]
+    },
+    "metadata": {
+      "$ref": "https://kubernetesjsonschema.dev/v1.14.0/_definitions.json#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+      "description": "Standard object metadata."
+    }
+  },
+  "type": "object",
+  "x-kubernetes-preserve-unknown-fields": true,
+  "additionalProperties": false,
+  "x-kubernetes-group-version-kind": [
+    {
+      "group": "serving.knative.dev",
+      "kind": "Service",
+      "version": "v1"
+    }
+  ],
+  "$schema": "http://json-schema.org/schema#"
+}
